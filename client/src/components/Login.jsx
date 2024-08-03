@@ -1,12 +1,25 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Header from "./Header";
+import { checkValidData } from "../utils/validate";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
+  const [errorMessage , setErrorMessage] = useState(null)
+  const email = useRef(null);
+  const password = useRef(null)
+  const name = useRef(null)
 
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
   };
+
+  const handleButtonClick = () => {
+    // validate form data
+  const message =  checkValidData(email.current.value, password.current.value, name.current.value)
+  setErrorMessage(message)
+ 
+    
+  }
 
   return (
     <div>
@@ -17,26 +30,32 @@ const Login = () => {
           alt="logo"
         />
       </div>
-      <form className="absolute left-0 right-0 w-3/12 p-12 mx-auto text-white bg-black rounded-lg my-36 bg-opacity-80">
+      <form onSubmit={(e) => e.preventDefault()}  className="absolute left-0 right-0 w-3/12 p-12 mx-auto text-white bg-black rounded-lg my-36 bg-opacity-80">
         <h1 className="py-4 text-3xl text-bold">{isSignInForm ? "Sign In" : "Sign Up"}</h1>
         
        { ! isSignInForm && <input
+          ref={name}
           type="text"
           placeholder="Name"
           className="w-full p-4 my-4 bg-gray-700"
         />
         }
         <input
+          ref={email}
           type="text"
           placeholder="Email Address"
           className="w-full p-4 my-4 bg-gray-700"
         />
         <input
+          ref={password}
           type="password"
           placeholder="Password"
           className="w-full p-4 my-4 bg-gray-700"
         />
-        <button className="w-full p-4 my-6 bg-red-700 rounded-lg">
+
+        <p className="py-2 font-bold text-red-500">{errorMessage}</p>
+
+        <button className="w-full p-4 my-6 bg-red-700 rounded-lg" onClick={handleButtonClick}>
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
         <p className="py-4 cursor-pointer" onClick={toggleSignInForm}>
